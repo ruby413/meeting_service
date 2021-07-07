@@ -1,0 +1,361 @@
+const mysql = require("mysql");
+const dbconfig = require("./data/database.js");
+const connection = mysql.createConnection(dbconfig);
+const express = require("express");
+const path = require("path");
+const app = express();
+
+app.use(express.static("view"));
+app.set("views", __dirname + "/view");
+app.set("view engine", "ejs");
+
+// app.get("/", function (req, res) {
+//   res.sendFile(path.join(__dirname, "view", "index.html"));
+// });
+
+/* item */
+
+app.get("/admin_item", function (req, res) {
+  connection.query(`SELECT * from temp_item`, function (err, rows) {
+    if (err) throw err;
+    res.render("item.ejs", { info: rows });
+  });
+});
+
+app.get("/admin_item/post", function (req, res) {
+  connection.query(
+    `INSERT INTO temp_item VALUES (NULL, '${req.query.itemName}', ${req.query.count}, '${req.query.instaTag}', '${req.query.product_pic}')`,
+    function (err, rows) {
+      if (err) throw err;
+      res.redirect("/admin_item");
+    }
+  );
+});
+
+app.get("/admin_item/delete/:id", function (req, res) {
+  connection.query(`DELETE FROM temp_item WHERE id=${req.params.id}`, function (
+    err,
+    rows
+  ) {
+    if (err) throw err;
+    res.redirect("/admin_item");
+  });
+});
+
+app.get("/admin_item/update", function (req, res) {
+  connection.query(
+    `UPDATE temp_item SET p_name = '${req.query.itemName_remake}', p_count = ${req.query.count_remake}, p_tag = '${req.query.instaTag_remake}', p_pic = '${req.query.product_pic_remake}' WHERE id = ${req.query.id}`,
+    function (err, rows) {
+      if (err) throw err;
+      res.redirect("/admin_item");
+    }
+  );
+});
+
+/* model */
+
+app.get("/admin_model", function (req, res) {
+  connection.query(`SELECT * from temp_model`, function (err, rows) {
+    if (err) throw err;
+    res.render("model.ejs", { info: rows });
+  });
+});
+
+app.get("/admin_model/post", function (req, res) {
+  connection.query(
+    `INSERT INTO temp_model VALUES (NULL, '${req.query.m_name}', '${req.query.m_password}', '${req.query.m_ins_id}')`,
+    function (err, rows) {
+      if (err) throw err;
+      res.redirect("/admin_model");
+    }
+  );
+});
+
+app.get("/admin_model/delete/:id", function (req, res) {
+  connection.query(
+    `DELETE FROM temp_model WHERE m_id=${req.params.id}`,
+    function (err, rows) {
+      if (err) throw err;
+      res.redirect("/admin_model");
+    }
+  );
+});
+
+app.get("/admin_model/update", function (req, res) {
+  connection.query(
+    `UPDATE temp_model SET m_name = '${req.query.m_name}', m_password = '${req.query.m_password}', m_ins_id = '${req.query.m_ins_id}' WHERE m_id = ${req.query.m_id}`,
+    function (err, rows) {
+      if (err) throw err;
+      res.redirect("/admin_model");
+    }
+  );
+});
+
+
+
+/* manage */
+
+app.get("/admin_manage", function (req, res) {
+  connection.query(`SELECT * from temp_return_info`, function (err, rows) {
+    if (err) throw err;
+    res.render("manage.ejs", { info: rows });
+  });
+});
+
+app.get("/admin_manage/delete", function (req, res) {
+  connection.query(
+    `DELETE FROM temp_return_info WHERE info_id='${req.query.info_id}'`,
+    function (err, rows) {
+      if (err) throw err;
+      connection.query(
+        `SELECT p_count FROM temp_item WHERE p_name = '${req.query.p_name}'`,
+        function (err, p_count) {
+          let productCount = p_count[0].p_count;
+          connection.query(
+            `UPDATE temp_item SET p_count = ${
+              Number(productCount) + 1
+            } WHERE p_name = '${req.query.p_name}';`,
+            function (err, rows) {
+              if (err) throw err;
+              res.redirect("/admin_manage");
+            })
+        })
+    }
+  );
+});
+
+app.get("/admin_manage/update", function (req, res) {
+  connection.query(
+    `UPDATE temp_return_info SET p_name = '${req.query.p_name}', get_date_real = '${req.query.get_date_real}', post = '${req.query.post}', memo = '${req.query.memo}' WHERE info_id = ${req.query.info_id}`,
+    function (err, rows) {
+      if (err) throw err;
+        res.redirect("/admin_manage");
+    }
+  );
+});
+
+app.get("/admin_manage/update/prepare", function (req, res) {
+  connection.query(
+    `UPDATE temp_return_info SET prepare = '${req.query.prepare}' WHERE info_id = ${req.query.info_id}`,
+    function (err, rows) {
+      if (err) throw err;
+        res.redirect("/admin_manage");
+    }
+  );
+});
+
+app.get("/admin_manage/update/laundry", function (req, res) {
+  connection.query(
+    `UPDATE temp_return_info SET laundry = '${req.query.laundry}' WHERE info_id = ${req.query.info_id}`,
+    function (err, rows) {
+      if (err) throw err;
+        connection.query(
+          `SELECT p_count FROM temp_item WHERE p_name = '${req.query.p_name}'`,
+          function (err, p_count) {
+            let productCount = p_count[0].p_count;
+      /* 세탁완료 시 개수 증가 */
+            if(req.query.laundry == 'true'){
+            connection.query(
+              `UPDATE temp_item SET p_count = ${
+                Number(productCount) + 1
+              } WHERE p_name = '${req.query.p_name}';`,
+              function (err, rows) {
+                if (err) throw err;
+                res.redirect("/admin_manage");
+              })
+
+      /* 세탁취소 시 개수 감소 */
+          }else if(req.query.laundry == 'false'){
+            connection.query(
+              `UPDATE temp_item SET p_count = ${
+                Number(productCount) - 1
+              } WHERE p_name = '${req.query.p_name}';`,
+              function (err, rows) {
+                if (err) throw err;
+                res.redirect("/admin_manage");
+              })
+          }
+      })
+    }
+  );
+});
+
+/* login */
+
+app.get("/login", function (req, res) {
+  res.render("login.ejs", {error: ""});
+});
+
+app.get("/complete", function (req, res) {
+  res.render("complete.ejs");
+});
+
+app.get("/error1", function (req, res) {
+  res.render("error1.ejs");
+});
+
+app.get("/error2", function (req, res) {
+  res.render("error2.ejs");
+});
+
+/* instagram */
+app.get("/instagram", function (req, res) {
+if (req.query.m_password) {
+  connection.query(
+    `SELECT m_name from temp_model where m_password = '${req.query.m_password}'`,
+    function (err, m_name) {
+      if (err) throw err;
+      if (m_name.length > 0) {
+        let modelName = m_name[0].m_name;
+        connection.query(
+          `SELECT p_pic, p_tag from temp_return_info where m_name = '${modelName}'`,
+          function (err, info) {
+            if (err) throw err;
+            if (info.length !==0) {
+              res.render("instagram.ejs", { info: info.reverse(), error: "" });
+            }else{
+              res.render("instagram.ejs", { info: "", error: "아직 신청된 옷이 없습니다!" });
+            }
+          })
+      } else {
+        /* 패스워드에 맞는 모델 없음 */
+        res.render("login.ejs", { error: "비밀번호를 다시 입력해주세요."});
+      }
+    })  
+  } else {
+      res.redirect("/login");
+  }
+});
+
+/* Delivery */
+app.get("/delivery", function (req, res) {
+  if (req.query.m_password) {
+    /* 패스워드에 맞는 모델 찾기 */
+    connection.query(
+      `SELECT m_name from temp_model where m_password = '${req.query.m_password}'`,
+      function (err, m_name) {
+        if (m_name.length > 0) {
+          /* 신청 날짜가 6일 후에만 신청 가능하게 하기 - 로그인 가능 */
+          connection.query(
+            `SELECT give_date from temp_return_info where m_name = '${m_name[0].m_name}'`,
+            function (err, give_date) {
+              if (err) throw err;
+              let now = new Date();
+              let checkDate =
+                give_date.length !== 0
+                  ? give_date[give_date.length - 1].give_date <
+                    now.setDate(now.getDate() - 6)
+                  : true;
+              if (checkDate) {
+                connection.query(
+                  `SELECT * from temp_item where p_count > 0`,
+                  function (err, rows) {
+                    if (err) throw err;
+                    res.render("delivery.ejs", {
+                      info: rows,
+                      m_name: m_name[0].m_name
+                    });
+                  }
+                );
+              } else {
+                res.render("login.ejs", { error: "신청일 기준 7일 후 재신청 가능합니다." });
+              }
+            });
+            
+        } else {
+          /* 패스워드에 맞는 모델 없음 */
+          res.render("login.ejs", { error: "비밀번호를 다시 입력해주세요."});
+        }
+      }
+    );
+  } else {
+    res.redirect("/login");
+  }
+});
+
+app.get("/delivery/post", function (req, res) {
+  
+  /* 뒤로가기해서 다시 클릭한 경우 - 하루 락 */;
+  connection.query(
+    `SELECT give_date FROM temp_return_info WHERE p_name = '${req.query.m_name}'`,
+    function (err, give_date) {
+      let giveDate = give_date[0].give_date;
+      let today = new Date();
+      let nextDay = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`
+      if (giveDate == nextDay) {
+        return res.redirect("/error3");
+      }else{
+        
+      }
+    })
+  let modelInstaId = "";
+  connection.query(
+    `SELECT m_ins_id FROM temp_model where m_name = '${req.query.m_name}'`,
+    function (err, m_ins_id) {
+      if (err) throw err;
+      modelInstaId = m_ins_id[m_ins_id.length - 1].m_ins_id;
+      connection.query(
+        `SELECT p_count, p_pic FROM temp_item WHERE p_name = '${req.query.p_name1}'`,
+        function (err, itemInfo) {
+          if (err) throw err;
+          let productPic1 = itemInfo[0].p_pic;
+          let productCount1 = itemInfo[0].p_count;
+          /* 첫번째 의상이 겹쳤을 경우 */;
+          if (Number(productCount1) - 1 < 0) {
+            return res.redirect("/error1");
+          }
+  
+          /* 두개의 의상을 골랐을 경우 */;
+          if (req.query.p_name2) {
+            connection.query(
+              `SELECT p_count, p_pic FROM temp_item WHERE p_name = '${req.query.p_name2}'`,
+              function (err, itemInfo) {
+
+              let productPic2 = itemInfo[0].p_pic;
+              let productCount2 = itemInfo[0].p_count;
+            
+              /* 두번째 의상이 겹쳤을 경우 */;
+              if (Number(productCount2) - 1 < 0) {
+                return res.redirect("/error2");
+              }
+
+              connection.query(
+                `INSERT INTO temp_return_info (p_pic, m_name, p_name, give_date, get_date, p_tag, m_ins_id) VALUES ('${productPic2}','${req.query.m_name}', '${req.query.p_name2}', '${req.query.give_date}', '${req.query.get_date}', '${req.query.p_tag2}', '${modelInstaId}');`,
+                function (err, rows) {
+                  if (err) throw err;
+                  connection.query(
+                    `UPDATE temp_item SET p_count = ${
+                      Number(productCount2) - 1
+                    } WHERE p_name = '${req.query.p_name2}';`,
+                    function (err, rows) {
+                      if (err) throw err;
+                    }
+                  );
+                }
+              );
+            })
+          }
+
+          /* 한개의 의상을 골랐을 경우 */;
+          connection.query(
+            `INSERT INTO temp_return_info (p_pic, m_name, p_name, give_date, get_date, p_tag, m_ins_id) VALUES ('${productPic1}','${req.query.m_name}', '${req.query.p_name1}', '${req.query.give_date}', '${req.query.get_date}', '${req.query.p_tag1}', '${modelInstaId}');`,
+            function (err, rows) {
+              if (err) throw err;
+              connection.query(
+                `UPDATE temp_item SET p_count = ${
+                  Number(productCount1) - 1
+                } WHERE p_name = '${req.query.p_name1}';`,
+                function (err, rows) {
+                  if (err) throw err;
+                  res.redirect("/complete");
+                }
+              );
+            }
+          );
+        }
+      );
+    }
+  );
+});
+
+app.listen(3000);

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+
+<head>
+    <link rel="stylesheet" href="./apply.css" />
+    <link rel="shortcut icon" href="image/favicon.ico">
+    <link rel="icon" href="image/favicon.ico">
+    <meta charset="utf-8">    
+    <meta property="og:image"
+    content="https://oneulook-web.s3.ap-northeast-2.amazonaws.com/image/navLogo.png">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+    <meta name="google-site-verification" content="hq3RNYKc6bcpu34VoMA1JeYDUmsobiVQmIFNxeah9tM" />
+    <title>오늘룩</title>
+    <meta name="description" content="브랜드 의상을 입고싶다면 오늘룩으로!" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script type="text/javascript">
+        _TRK_PI = "SUBMIT";
+    </script>
+    <script>
+        doPopUp = () => {
+            
+            $('.place1').click(() => {
+                $("input:radio[name='place']:radio[value='교대']").prop('checked', true);
+            })
+            $('.place2').click(() => {
+                $("input:radio[name='place']:radio[value='이태원']").prop('checked', true);
+            })
+            $('.week1').click(() => {
+                $("input:radio[name='week']:radio[value='월']").prop('checked', true);
+            })
+            $('.week2').click(() => {
+                $("input:radio[name='week']:radio[value='수']").prop('checked', true);
+            })
+            $('.week3').click(() => {
+                $("input:radio[name='week']:radio[value='금']").prop('checked', true);
+            })
+            $('.meeting').click(() => {
+                $("input:radio[name='meeting']:radio").prop('checked', true);
+            })
+            $('.noMeeting').click(() => {
+                $("input:radio[name='noMeeting']:radio").prop('checked', true);
+            })
+            $('.laundrayFee').click(() => {
+                $("input:radio[name='laundrayFee']:radio").prop('checked', true);
+            })
+
+        }
+
+        spreadPic = () => {
+            var get = 'GET METHOD CALL';
+            $.ajax({
+                url: '/get/spreadPic',
+                type: 'get',
+                data: { data: get },
+                success: function (result) {
+                    alert(result)
+                }
+            });
+        }
+
+        valueCheck = () => {
+            let instagramId = $("input[name=instagramId]").val();
+            let phone = $("input[name=phone]").val();
+            let name = $("input[name=name]").val();
+            let value_check = Boolean(!phone) || Boolean(!name)
+            if (value_check) {
+                alert("빈칸이 있습니다.")
+            } else {
+                document.getElementById('apply_form').submit()
+            }
+        }
+
+    </script>
+</head>
+
+<body onload=" doPopUp()">
+    <header class="header">
+        <nav class="navigation">
+            <a href="/"></a>
+        </nav>
+        <div class="scrollCss">
+            <h1>모델 지원하기</h1>
+        </div>
+    </header>
+
+    <div class="bodySection">
+        <section id="">
+            <div class="">
+                <!-- <form action="http://nmodelin-rent-772207801.ap-northeast-2.elb.amazonaws.com/apply/" method="get"
+                    id="apply_form"> -->
+                    <form action="apply/" method="get"
+                    id="apply_form">
+                    <div class="applyDiv">
+                        <div class="applyForm">
+                           
+                            <label for="name" class="apply_label">
+                                <p class="form_bigWord" style="margin-bottom:10px">이름 <span class="yellowWord">*</span></p>
+
+                            </label>
+                            <input type="text" id="name" class="delivery_apply" id="delivery_phone" name="name"
+                                placeholder="입력">
+
+                            <label for="phone" class="apply_label">
+                                <p class="form_bigWord" style="margin-bottom:10px">연락처 <span class="yellowWord">*</span></p>
+
+                            </label>
+                            <input type="text" id="phone" class="delivery_apply" id="delivery_phone" name="phone"
+                                placeholder="입력">
+
+                            <label for="pickupDate" class="apply_label">
+                                <p class="form_bigWord" style="margin-bottom:10px">수령요일 <span class="yellowWord">*</span></p>
+
+                            </label>
+                            <input type="text" id="pickupDate" class="delivery_apply" id="delivery_phone" name="pickupDate"
+                                placeholder="입력">
+
+                            <label for="pickupPlace" class="apply_label">
+                                <p class="form_bigWord" style="margin-bottom:10px">수령장소 <span class="yellowWord">*</span></p>
+
+                            </label>
+                            <input type="text" id="pickupPlace" class="delivery_apply" id="delivery_phone" name="pickupPlace"
+                                placeholder="입력">
+
+                            <label for="address" class="apply_label">
+                                <p class="form_bigWord" style="margin-bottom:10px">주소 <span class="yellowWord">*</span></p>
+
+                            </label>
+                            <input type="text" id="address" class="delivery_apply" id="delivery_phone" name="address"
+                                placeholder="입력">
+
+                            <label for="payment" class="apply_label">
+                                <p class="form_bigWord" style="margin-bottom:10px">결제 <span class="yellowWord">*</span></p>
+
+                            </label>
+                            <input type="text" id="payment" class="delivery_apply" id="delivery_phone" name="payment"
+                                placeholder="입력">
+
+                        </div>
+                    </div>
+                    <div class="explain_apply"></div>
+                    <div>
+                        <button type="button" id="deliveryApply" class="applyButton" onclick="valueCheck()">지원완료
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </section>
+</body>
+
+<script src="../10284_Insight_WebAnalytics.js"></script>
+</html>
