@@ -19,14 +19,15 @@ app.get("/model_apply", function (req, res) {
 });
 
 app.get("/apply", function (req, res) {
-  // res.sendFile(path.join(__dirname, "view", "apply.html"));
+  // res.sendFile(path.join(__dirnames, "view", "apply.html"));
   console.log(req.query);
   accessSpreadsheet(
-    req.query.phone,
     req.query.name,
+    req.query.phone,
     req.query.pickupDate,
     req.query.pickupPlace,
-    req.query.address,
+    req.query.address1,
+    req.query.address2,
     req.query.payment
   );
   sendSlackMessage();

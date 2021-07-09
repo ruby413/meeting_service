@@ -6,9 +6,8 @@
     <link rel="stylesheet" href="./apply.css" />
     <link rel="shortcut icon" href="image/favicon.ico">
     <link rel="icon" href="image/favicon.ico">
-    <meta charset="utf-8">    
-    <meta property="og:image"
-    content="https://oneulook-web.s3.ap-northeast-2.amazonaws.com/image/navLogo.png">
+    <meta charset="utf-8">
+    <meta property="og:image" content="https://oneulook-web.s3.ap-northeast-2.amazonaws.com/image/navLogo.png">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
     <meta name="google-site-verification" content="hq3RNYKc6bcpu34VoMA1JeYDUmsobiVQmIFNxeah9tM" />
     <title>오늘룩</title>
@@ -18,32 +17,222 @@
         _TRK_PI = "SUBMIT";
     </script>
     <script>
+
+const checkOS = () => {
+            let OSInfo = navigator.userAgent;
+            let downloadNode = document.getElementById("appDownload")
+            // let iosDisplayNone = document.getElementById("iosDisplayNone")
+            let downloadUrlJson = { ios: "https://apps.apple.com/app/id1495282226", android: "https://play.google.com/store/apps/details?id=kr.nmodelin.app" }
+            if (OSInfo.match('Mac')[0] === 'Mac') {
+                // iosDisplayNone.style.display = "none"
+                downloadNode.innerHTML = appDownloadHTML(downloadUrlJson.ios)
+            } else if (OSInfo.match('Windows')[0] === 'Windows') {
+                // iosDisplayNone.style.display = "none"
+                downloadNode.innerHTML = appDownloadHTML(downloadUrlJson.android)
+            } else {
+                downloadNode.innerHTML = `<a href= ${downloadUrlJson.android}  target="_blank" > 
+                <span class = "allButtonWord">
+                    앱 다운로드
+                </span>
+            </a>`
+            }
+        }
+
+        const appDownloadHTML = (url) => {
+            // return `<a href= "https://bit.ly/33anlHr" onclick="guidance();">
+            return `<a href= ${url} > 
+                <span class = "allButtonWord">
+                    앱 다운로드
+                </span>
+            </a>`
+        };
+
+    
         doPopUp = () => {
+            $('#startBtn').click(() => {
+                let pw = $("input[name=pw]").val();
+                if (pw == "154234") {
+                    $(".applyForm").css('display','block');
+                    $(".start").css('display','none');
+                }else{
+                    alert("비밀번호가 틀렸습니다. 02-583-8004 로 문의해주세요!")
+                }
+            })
+            $('#pickupDate1').click(() => {
+                $("input[name='selectDay']").val('전주 금요일, 8am - 2pm');
+            })
+            $('#pickupDate2').click(() => {
+                $("input[name='selectDay']").val('월요일, 8am - 2pm');
+            })
+            $('#pickupDate3').click(() => {
+                $("input[name='selectDay']").val('수요일, 8am - 2pm');
+            })
+
+            $('#pickupPlace1').click(() => {
+                $(".pickup_explain").addClass('place1');
+                $(".pickup_explain").removeClass('place2');
+                $(".pickup_explain").removeClass('place3');
+                $(".pickup_delivery").css('display','inline-block');
+            })
+            $('#pickupPlace2').click(() => {
+                $(".pickup_explain").addClass('place2');
+                $(".pickup_explain").removeClass('place1');
+                $(".pickup_explain").removeClass('place3');
+                $(".pickup_delivery").css('display','none');
+            })
+            $('#pickupPlace3').click(() => {
+                $(".pickup_explain").addClass('place3');
+                $(".pickup_explain").removeClass('place2');
+                $(".pickup_explain").removeClass('place1');
+                $(".pickup_delivery").css('display','none');
+            })
+
+            $('#payment1').click(() => {
+                $(".pay_explain").addClass('pay1');
+                $(".pay_explain").removeClass('pay2');
+            })
+            $('#payment2').click(() => {
+                $(".pay_explain").addClass('pay2');
+                $(".pay_explain").removeClass('pay1');
+            })
+
+
+            $('#section1Btn').click(() => {
+                let phone = $("input[name=phone]").val();
+                let name = $("input[name=name]").val();
+                let value_check = Boolean(!phone) || Boolean(!name)
+                if (value_check) {
+                    alert("빈칸이 있습니다.")
+                }else{
+                    $(".section1").css('display','none');
+                    $(".section2").css('display','block');
+                }
+            })
+
+            $('#section2Btn').click(() => {
+                let value_check = $ (".pickupDate").is (":checked")
+                if (!value_check) {
+                    alert("요일을 선택해주세요.")
+                }else{
+                    $(".section2").css('display','none');
+                    $(".section3").css('display','block');
+                }
+            })
+
+            $('#section2BtnBack').click(() => {
+                $(".section2").css('display','none');
+                $(".section1").css('display','block');
+                $(".applyButton").css('display','none');
+                $("#section7BtnBack").css('display','none');
+            })
+
+            $('#section3Btn').click(() => {
+                let value_check = $(".pickupPlace").is (":checked")
+                if (!value_check) {
+                    alert("장소을 선택해주세요.")
+                }else{
+                    if($("#pickupPlace1").is (":checked")){
+                        let address1 = $("input[name=address1]").val();
+                        let delivery_check_box = $(".delivery_check_box").is(':checked');
+                        console.log(address1)
+                        console.log(delivery_check_box)
+                        let value_check = Boolean(!address1) || Boolean(!delivery_check_box)
+                        if (value_check) {
+                            alert("주소를 입력하신 후 택배 사용 방법을 확인해주세요.")
+                        }else{
+                            $(".section3").css('display','none');
+                            $(".section4").css('display','block');
+                        }
+                    }else{
+                        $(".section3").css('display','none');
+                        $(".section4").css('display','block');
+                    }
+                }
+            })
+
+            $('#section3BtnBack').click(() => {
+                $(".section3").css('display','none');
+                $(".section2").css('display','block');
+                $(".applyButton").css('display','none');
+                $("#section7BtnBack").css('display','none');
+            })
+
+            $('#section4Btn').click(() => {
+                let value_check = $("#pay_check").is(':checked')
+                if (!value_check) {
+                    alert("ARS 문자에 카드등록을 진행해주세요!")
+                }else{
+                    $(".section4").css('display','none');
+                    $(".section5").css('display','block');
+                }
+            })
+
+            $('#section4BtnBack').click(() => {
+                $(".section4").css('display','none');
+                $(".section3").css('display','block');
+                $(".applyButton").css('display','none');
+                $("#section7BtnBack").css('display','none');
+            })
+
+            $('#section5Btn').click(() => {
+                let notice1_check = $("#notice1_check").is(':checked')
+                let notice2_check = $("#notice2_check").is(':checked')
+                let value_check = Boolean(!notice1_check) || Boolean(!notice2_check)
+                if (value_check) {
+                    alert("필요사항 확인을 완료해주세요")
+                }else{
+                    $(".section5").css('display','none');
+                    $(".section6").css('display','block');
+                }
+            })
+
+            $('#section5BtnBack').click(() => {
+                $(".section5").css('display','none');
+                $(".section4").css('display','block');
+                $(".applyButton").css('display','none');
+                $("#section7BtnBack").css('display','none');
+            })
+
+            $('#section6Btn').click(() => {
+                let value_check = $("#notice3_check").is(':checked')
+                if (!value_check) {
+                    alert("주의사항 확인을 완료해주세요")
+                }else{
+                    $(".section6").css('display','none');
+                    $(".section7").css('display','block');
+                    $(".applyButton").css('display','inline-block');
+                    $("#section7BtnBack").css('display','inline-block');
+                }
+            })
+
+            $('#section6BtnBack').click(() => {
+                $(".section6").css('display','none');
+                $(".section5").css('display','block');
+                $(".applyButton").css('display','none');
+                $("#section7BtnBack").css('display','none');
+            })
+
+            $('#section7BtnBack').click(() => {
+                $(".section7").css('display','none');
+                $(".section6").css('display','block');
+                $(".applyButton").css('display','none');
+                $("#section7BtnBack").css('display','none');
+            })
+
+            $('.applyButton').click(() => {
+                let value_check = $("#notice4_check").is(':checked')
+                if (!value_check) {
+                    alert("앱 다운로드 후 모델지원을 해주세요!")
+                }else{
+                    // $(".section7").css('display','none');
+                    // $(".section8").css('display','block');
+                    // $(".applyButton").css('display','inline-block');
+                    document.getElementById('apply_form').submit()
+                }
+            })
+
+
             
-            $('.place1').click(() => {
-                $("input:radio[name='place']:radio[value='교대']").prop('checked', true);
-            })
-            $('.place2').click(() => {
-                $("input:radio[name='place']:radio[value='이태원']").prop('checked', true);
-            })
-            $('.week1').click(() => {
-                $("input:radio[name='week']:radio[value='월']").prop('checked', true);
-            })
-            $('.week2').click(() => {
-                $("input:radio[name='week']:radio[value='수']").prop('checked', true);
-            })
-            $('.week3').click(() => {
-                $("input:radio[name='week']:radio[value='금']").prop('checked', true);
-            })
-            $('.meeting').click(() => {
-                $("input:radio[name='meeting']:radio").prop('checked', true);
-            })
-            $('.noMeeting').click(() => {
-                $("input:radio[name='noMeeting']:radio").prop('checked', true);
-            })
-            $('.laundrayFee').click(() => {
-                $("input:radio[name='laundrayFee']:radio").prop('checked', true);
-            })
 
         }
 
@@ -59,17 +248,9 @@
             });
         }
 
-        valueCheck = () => {
-            let instagramId = $("input[name=instagramId]").val();
-            let phone = $("input[name=phone]").val();
-            let name = $("input[name=name]").val();
-            let value_check = Boolean(!phone) || Boolean(!name)
-            if (value_check) {
-                alert("빈칸이 있습니다.")
-            } else {
-                document.getElementById('apply_form').submit()
-            }
-        }
+        // valueCheck = () => {
+        //     document.getElementById('apply_form').submit()
+        // }
 
     </script>
 </head>
@@ -89,58 +270,202 @@
             <div class="">
                 <!-- <form action="http://nmodelin-rent-772207801.ap-northeast-2.elb.amazonaws.com/apply/" method="get"
                     id="apply_form"> -->
-                    <form action="apply/" method="get"
-                    id="apply_form">
+                <form action="apply/" method="get" id="apply_form">
                     <div class="applyDiv">
+                        <div class="start">
+                            <label for="pw" class="apply_label">
+                                <p class="form_bigWord" style="margin-bottom:10px">비밀번호 <span class="yellowWord">*</span>
+                                </p>
+                            </label>
+                            <input type="text" id="pw" class="delivery_apply" id="pw" name="pw"
+                                    placeholder="입력">
+                            <div class="pageBtn">
+                                <a id="startBtn"></a>
+                            </div>
+                        </div>
                         <div class="applyForm">
-                           
-                            <label for="name" class="apply_label">
-                                <p class="form_bigWord" style="margin-bottom:10px">이름 <span class="yellowWord">*</span></p>
+                            <div class ="section1">
+                                <label for="name" class="apply_label">
+                                    <p class="form_bigWord" style="margin-bottom:10px">이름 <span class="yellowWord">*</span>
+                                    </p>
 
-                            </label>
-                            <input type="text" id="name" class="delivery_apply" id="delivery_phone" name="name"
-                                placeholder="입력">
+                                </label>
+                                <input type="text" id="name" class="delivery_apply" id="delivery_phone" name="name"
+                                    placeholder="입력">
 
-                            <label for="phone" class="apply_label">
-                                <p class="form_bigWord" style="margin-bottom:10px">연락처 <span class="yellowWord">*</span></p>
+                                <label for="phone" class="apply_label">
+                                    <p class="form_bigWord" style="margin-bottom:10px">연락처 <span class="yellowWord">*</span>
+                                    </p>
 
-                            </label>
-                            <input type="text" id="phone" class="delivery_apply" id="delivery_phone" name="phone"
-                                placeholder="입력">
+                                </label>
+                                <input type="text" id="phone" class="delivery_apply" id="delivery_phone" name="phone"
+                                    placeholder="입력">
+                                <div class="pageBtn">
+                                    <a id="section1Btn"></a>
+                                </div>
+                            </div>
 
-                            <label for="pickupDate" class="apply_label">
-                                <p class="form_bigWord" style="margin-bottom:10px">수령요일 <span class="yellowWord">*</span></p>
+                            <div class ="section2">
+                                <label for="pickupDate" class="apply_label">
+                                    <p class="form_bigWord" style="margin-bottom:10px">수령요일 <span
+                                            class="yellowWord">*</span></p>
 
-                            </label>
-                            <input type="text" id="pickupDate" class="delivery_apply" id="delivery_phone" name="pickupDate"
-                                placeholder="입력">
+                                </label>
+                                <p class="radioButton">
+                                    <input type="radio" class="pickupDate" id="pickupDate1" name="pickupDate" value="월요일">
+                                    <label for="pickupDate1">월요일</label>
+                                </p>
+                                <p class="radioButton">
+                                    <input type="radio" class="pickupDate" id="pickupDate2" name="pickupDate" value="수요일">
+                                    <label for="pickupDate2">수요일</label>
+                                </p>
+                                <p class="radioButton">
+                                    <input type="radio" class="pickupDate" id="pickupDate3" name="pickupDate" value="금요일">
+                                    <label for="pickupDate3">금요일</label>
+                                </p>
 
-                            <label for="pickupPlace" class="apply_label">
-                                <p class="form_bigWord" style="margin-bottom:10px">수령장소 <span class="yellowWord">*</span></p>
+                                <label class="apply_label">
+                                    <p class="form_bigWord" style="margin-bottom:10px">의상 선택요일 <span
+                                            class="yellowWord">*</span></p>
 
-                            </label>
-                            <input type="text" id="pickupPlace" class="delivery_apply" id="delivery_phone" name="pickupPlace"
-                                placeholder="입력">
+                                </label>
+                                <input type="text" class="selectDay" name="selectDay" class="delivery_apply" readonly>
 
-                            <label for="address" class="apply_label">
-                                <p class="form_bigWord" style="margin-bottom:10px">주소 <span class="yellowWord">*</span></p>
 
-                            </label>
-                            <input type="text" id="address" class="delivery_apply" id="delivery_phone" name="address"
-                                placeholder="입력">
+                                <div class="apply_explain"></div>
 
-                            <label for="payment" class="apply_label">
-                                <p class="form_bigWord" style="margin-bottom:10px">결제 <span class="yellowWord">*</span></p>
+                                <a class ="howToSelect" target="_blank" href="https://oneulook-web.s3.ap-northeast-2.amazonaws.com/select_clothes.mp4">의상 선택, 어떻게 해요? (링크)</a>
+                                <div class="pageBtn">
+                                    <a id="section2BtnBack"></a>
+                                    <a id="section2Btn"></a>
+                                </div>
+                            </div>
+                            <div class ="section3">
+                                <label for="pickupPlace" class="apply_label">
+                                    <p class="form_bigWord" style="margin-bottom:10px">수령장소 <span
+                                            class="yellowWord">*</span></p>
 
-                            </label>
-                            <input type="text" id="payment" class="delivery_apply" id="delivery_phone" name="payment"
-                                placeholder="입력">
+                                </label>
+                                <p class="radioButton">
+                                    <input type="radio" class="pickupPlace" id="pickupPlace1" name="pickupPlace" value="택배">
+                                    <label for="pickupPlace1">택배</label>
+                                </p>
+                                <p class="radioButton">
+                                    <input type="radio" class="pickupPlace" id="pickupPlace2" name="pickupPlace" value="교대">
+                                    <label for="pickupPlace2">교대</label>
+                                </p>
+                                <p class="radioButton">
+                                    <input type="radio" class="pickupPlace" id="pickupPlace3" name="pickupPlace" value="이태원">
+                                    <label for="pickupPlace3">이태원</label>
+                                </p>
+                                <div class="pickup_delivery">
+                                    <label for="address1" class="apply_label">
+                                        <p class="form_bigWord" style="margin-bottom:10px">주소 <span class="yellowWord">*</span>
+                                        </p>
 
+                                    </label>
+                                    <input type="text" id="address1" class="delivery_apply"  name="address1"
+                                        placeholder="입력">
+                                    <label for="address2" class="apply_label">
+                                        <p class="form_bigWord" style="margin-bottom:10px">공동현관 출입방법 
+                                        </p>
+
+                                    </label>
+                                    <input type="text" id="address2" class="delivery_apply" name="address2"
+                                        placeholder="입력">
+                                    
+                                    <p style = "margin-top:15px">
+                                        <a class ="howToSelect" target="_blank" href="https://oneulook-web.s3.ap-northeast-2.amazonaws.com/delivery_service.pdf">택배사용방법 (링크)</a>  
+                                    </p>
+                                    <p class = "delivery_check_p">
+                                        <input type="checkbox" class="delivery_check_box" id="delivery_check" name="delivery_check" value="">
+                                        <label for="delivery_check" class="delivery_check">택배 사용방법 확인했습니다.</label>
+                                    </p>
+                                </div>
+                                <div class="pickup_explain"></div>
+                                <div class="pageBtn">
+                                    <a id="section3BtnBack"></a>
+                                    <a id="section3Btn"></a>
+                                </div>
+                            </div>
+                            <div class ="section4">
+                                <label for="payment" class="apply_label">
+                                    <p class="form_bigWord" style="margin-bottom:10px">결제 <span class="yellowWord">*</span>
+                                    </p>
+                                </label>
+                                <p class="radioButton">
+                                    <input type="radio" id="payment1" name="payment" value="월">
+                                    <label for="payment1">월</label>
+                                </p>
+                                <p class="radioButton">
+                                    <input type="radio" id="payment2" name="payment" value="벌">
+                                    <label for="payment2">벌</label>
+                                </p>
+                                <div class="pay_explain"></div>
+                                <p class="delivery_check" style="margin-top: 20px">* 보내드린 ARS 문자에 카드등록을 진행해주세요.</p>
+                                <p class = "delivery_check_p">
+                                    <input type="checkbox" class="delivery_check_box" id="pay_check" name="pay_check" value="">
+                                    <label for="pay_check" class="delivery_check">카드등록 완료했습니다.</label>
+                                </p>
+                                <div class="pageBtn">
+                                    <a id="section4BtnBack"></a>
+                                    <a id="section4Btn"></a>
+                                </div>
+                            </div>
+                            <div class ="section5">
+                                <div class="notice1_explain"></div>
+                                <p style = "margin-top:15px">
+                                    <a class ="howToSelect" target="_blank" href="https://oneulook-web.s3.ap-northeast-2.amazonaws.com/posting.mp4">포스팅 방법 확인 (링크)</a>
+                                    <input type="checkbox" class="delivery_check_box" id="notice1_check" name="notice1_check" value="">
+                                    <label for="notice1_check" class="delivery_check">포스팅 방법 확인했습니다.</label>  
+                                </p>
+                                <p class = "delivery_check_p">
+                                    <input type="checkbox" class="delivery_check_box" id="notice2_check" name="notice2_check" value="">
+                                    <label for="notice2_check" class="delivery_check">인스타그램 프로필 설정 완료했습니다.</label>
+                                </p>
+                                <div class="pageBtn">
+                                    <a id="section5BtnBack"></a>
+                                    <a id="section5Btn"></a>
+                                </div>
+                            </div>
+                            <div class ="section6">
+                                <div class="notice2_explain"></div>
+                                <p class = "delivery_check_p">
+                                    <input type="checkbox" class="delivery_check_box" id="notice3_check" name="notice3_check" value="">
+                                    <label for="notice3_check" class="delivery_check">주의사항 확인 완료했습니다.</label>
+                                </p>
+                                <div class="pageBtn">
+                                    <a id="section6BtnBack"></a>
+                                    <a id="section6Btn"></a>
+                                </div>
+                            </div>
+                            <div class ="section7">
+                                <p class="delivery_check">앱에서 모델지원까지 완료하셔야, 의상선택이 가능해요!</p>
+                                <div class="allButton" id="appDownload">
+                                    <a href="https://apps.apple.com/app/id1495282226"  target="_blank"> 
+                                        <span class="allButtonWord">
+                                            앱 다운로드
+                                        </span>
+                                    </a>
+                                </div>
+                                <p class="signin"></p>
+                                <p class = "delivery_check_p">
+                                    <input type="checkbox" class="delivery_check_box" id="notice4_check" name="notice4_check" value="">
+                                    <label for="notice4_check" class="delivery_check">앱 다운로드 후 모델지원 완료했습니다.</label>
+                                </p>
+                                <div class="pageBtn">
+                                    <!-- <a id="section7BtnBack"></a> -->
+                                    <!-- <a id="section7Btn"></a> -->
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="explain_apply"></div>
-                    <div>
-                        <button type="button" id="deliveryApply" class="applyButton" onclick="valueCheck()">지원완료
+                    <div class="applydiv">
+                        <!-- <div class="pageBtn"> -->
+                            <a id="section7BtnBack"></a>
+                            <!-- <a id="section7Btn"></a> -->
+                        <!-- </div> -->
+                        <button type="button" id="deliveryApply" class="applyButton" onclick="valueCheck()" >지원완료
                         </button>
                     </div>
                 </form>
@@ -150,4 +475,5 @@
 </body>
 
 <script src="../10284_Insight_WebAnalytics.js"></script>
+
 </html>

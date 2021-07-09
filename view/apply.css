@@ -244,6 +244,7 @@ pre{
     display: inline-block;
     padding-top: 0px;
     padding-right: 10px;
+    display:none;
 }
 
 .form_bigWord{
@@ -313,16 +314,16 @@ select.delivery_apply{
 }
 
 input[type='radio']{
-    -webkit-appearance: none;
+    /* -webkit-appearance: none;
     appearance: none;
     border-radius: 50%;
-    border: 1px solid rgb(232,232,232);
-}
-input[type='radio']:checked {  
-    appearance: radio;  
-    -webkit-appearance: radio;
+    border: 1px solid rgb(232,232,232); */
 }
 
+.radioButton{
+    display:inline-block;
+    margin-top:10px
+}
 .form_check{
     font-size: 15px;
     color:#262626;
@@ -333,17 +334,21 @@ input[type='radio']:checked {
 }
 
 .applyButton{
-    padding: 18px;
-    width: 141px;
+    padding: 10px;
+    width: 90px;
     background: #fbbb65;
     border: none;
-    margin-bottom: 20px;
+    /* margin-bottom: 20px; */
     color: #262626;
-    font-size: 18px;
+    font-size: 15px;
     font-weight: bold;
     border-radius: 28px;
-    letter-spacing: -0.5px;
+    letter-spacing: -0.5px;    
+    display: inline-block;
+    /* margin-left: 130px; */
 }
+
+
 
 .subfooter{
     background: #393937;
@@ -448,4 +453,186 @@ input[type='radio']:checked {
 
 .kakaoImg{
     width:60px
+}
+
+.radioButton > input{
+    float: left;
+    margin-right: 4px;
+    margin-top: 2px
+}
+.radioButton > label{
+    font-size : 15px;
+    float: left;
+    margin-right: 20px;
+    font-weight : bold
+}
+
+.selectDay {
+    border: none;
+    font-weight: bold;
+    font-size: 15px;
+    padding: 0px;
+    color: #e12727
+}
+
+.apply_explain{    
+    height: 200px;
+    margin-top: 30px;
+    background: url(https://oneulook-web.s3.ap-northeast-2.amazonaws.com/view/image/select-img-01.jpg) no-repeat center 0px;
+    background-size: 360px;
+}
+
+.howToSelect{
+    text-decoration: underline;
+    font-size: 15px;
+    font-weight: bold;
+    color: #e12727;
+    display:block;
+    margin-bottom: 10px
+}
+
+.pickup_explain{
+}
+
+.place1{ 
+    background: url(https://oneulook-web.s3.ap-northeast-2.amazonaws.com/view/image/delivery-img-01.jpg) no-repeat center 0px;
+    background-size: 360px;
+    height: 230px;
+    margin-top: 10px;
+}
+
+.place2{
+    background: url(https://oneulook-web.s3.ap-northeast-2.amazonaws.com/view/image/place2-img-01.jpg) no-repeat center 0px;
+    background-size: 360px;
+    height: 430px;
+    margin-top: 10px;
+}
+
+.place3{
+    background: url(https://oneulook-web.s3.ap-northeast-2.amazonaws.com/view/image/place3-img-01.jpg) no-repeat center 0px;
+    background-size: 360px;
+    height: 430px;
+    margin-top: 10px;  
+}
+
+.display_inlineblock{
+    display: inline-block;
+}
+
+.pickup_delivery{
+    display : none
+}
+
+.delivery_check_p{
+    margin-top:14px
+}
+.delivery_check{
+    font-size: 14px;
+    font-weight: bold;
+    margin-left: 4px;
+}
+.delivery_check_box{
+    width:15px
+}
+
+.pay_explain{
+    display : none;
+}
+
+.pay1{
+    background: url(https://oneulook-web.s3.ap-northeast-2.amazonaws.com/view/image/pay1-img-01.jpg) no-repeat center 0px;
+    background-size: 360px;
+    height: 230px;
+    margin-top: 10px;   
+    display: block;
+}
+
+.pay2{
+    background: url(https://oneulook-web.s3.ap-northeast-2.amazonaws.com/view/image/pay2-img-01.jpg) no-repeat center 0px;
+    background-size: 360px;
+    height: 230px;
+    margin-top: 10px;   
+    display: block;
+}
+
+.notice1_explain{
+    background: url(https://oneulook-web.s3.ap-northeast-2.amazonaws.com/view/image/notice1-img-01.jpg) no-repeat center 0px;
+    background-size: 360px;
+    height: 230px;
+    margin-top: 10px;   
+}
+
+.notice2_explain{
+    background: url(https://oneulook-web.s3.ap-northeast-2.amazonaws.com/view/image/notice2-img-01.jpg) no-repeat center 0px;
+    background-size: 360px;
+    height: 460px;
+    margin-top: 10px;   
+}
+
+.signin{
+    background: url(https://oneulook-web.s3.ap-northeast-2.amazonaws.com/view/image/signin.png
+    ) no-repeat center 0px;
+    background-size: 360px;
+    height: 325px;
+    margin-top: 10px;   
+}
+
+.section2, .section3, .section4, .section5, .section6, .section7,.section8{
+    display : none
+}
+.applyButton{
+    display : none
+}
+
+#startBtn, #section1Btn, #section2Btn, #section3Btn, #section4Btn, #section5Btn, #section6Btn, #section7Btn {
+    margin-top: 30px;   
+    background: url(https://oneulook-web.s3.ap-northeast-2.amazonaws.com/view/image/next.png) no-repeat 0px 0px;
+    width: 71px;
+    height: 42px;
+    display: inline-block;
+    background-size: 70px;
+    cursor: pointer;
+}
+
+#section1BtnBack, #section2BtnBack, #section3BtnBack, #section4BtnBack, #section5BtnBack, #section6BtnBack, #section7BtnBack {
+    margin-top: 30px;   
+    background: url(https://oneulook-web.s3.ap-northeast-2.amazonaws.com/view/image/back.png) no-repeat 0px 0px;
+    width: 90px;
+    height: 42px;
+    display: inline-block;
+    background-size: 70px;
+    cursor: pointer;
+}
+.pageBtn{
+    text-align: center;
+}
+
+.allButton > a {
+    width: 100%;
+    height: 100%;
+    display: inline-block;
+}
+
+.allButtonWord {
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: -0.5px;
+    color: #333333;
+    margin-left: 68px;
+    margin-top: 14px;
+    display: inline-block;
+}
+
+.allButton {
+    display: inline-block;
+    width: 190px;
+    height: 46px;
+    border-radius: 50px;
+    background-color: #dbdbdb;
+    margin: 20px 73px;
+}
+
+#section7BtnBack{
+    display:none;
+    margin-right: 65px;
 }
